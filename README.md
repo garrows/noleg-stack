@@ -4,6 +4,14 @@ The NOLEG (Node, mOngo, Linux (E)nginx Git) Stack
 This post explains the NOLEG stack and provides a script that will get you running with 2 node sites, running securely on a linux server behind nginx while being a git server with hooks for deploying your site every time you commit to your private repository all within 10 minutes (some assumptions made). 
 
 
+Use the Script
+==============
+
+If you want to get started real fast, start your Ubuntu server and run setup.sh on it changing the DOMAIN setting to what ever domain you are using. You should be able to go to http://www.example.com and http://www.example.com/blog and see 2 different sites along with having your very own git server.
+
+If this doesn't work for you or you would like to lean a few things, follow the step by step instructions below.
+
+
 Assumptions
 ===========
 
