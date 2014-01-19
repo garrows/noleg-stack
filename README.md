@@ -1,7 +1,12 @@
-This post assumes you own example.com and wish to setup a node.js site on beta.example.com and www.example.com. It will also serve static files from /public/ on those sites. All code will be deployed via git automagically using hooks. 
+The NOLEG (Node, mOngo, Linux (E)nginx Git) Stack
+========
+
+This post explains the NOLEG stack and provides a script that will get you running with 2 node sites, running securely on a linux server behind nginx while being a git server with hooks for deploying your site every time you commit to your private repository all within 10 minutes (some assumptions made). 
+
 
 Assumptions
 ========
+
 This post assumes that you:
 
    - have used nodejs before
@@ -9,11 +14,19 @@ This post assumes that you:
    - have used linux/ubuntu before
    - are able to setup your own DNS settings
 
+
 Boot
 ===
+
 Startup your Ubuntu Server. I'm using an M1.Micro on Amazon's EC2 running Ubuntu Server 12.04.3 LTS. 
 
-Make sure you open up port 80 and 22 on the security group or firewall. Also setup you DNS servers to point beta and www to the server's public IP address. Now SSH into your server. 
+Make sure you open up port 80 and 22 on the security group or firewall. Also setup you DNS servers to point beta and www to the server's public IP address. 
+
+You can open up port 3000 and 2368 if you want to do some individual node site testing too.
+
+Now SSH into your server. 
+
+
 
 Installations
 =========
@@ -277,7 +290,7 @@ sudo start node-blog
 
 ```
 
-If everything went to plan you should have 2 sites running http://example.com:3000 and http://example.com:2368. If the blog (http://example.com:2468) doesn't work, dont worry, that is because of the host ip address in the config. Nginx will fix this for us.
+If everything went to plan you should have 2 sites running http://example.com:3000 and http://example.com:2368. If the blog (http://example.com:2368) doesn't work, dont worry, that is because of the host ip address in the config. Nginx will fix this for us.
 
 
 Configure Nginx Virtual Hosts
