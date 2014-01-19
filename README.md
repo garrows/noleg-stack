@@ -28,7 +28,7 @@ Boot
 
 Startup your Ubuntu Server. I'm using an M1.Micro on Amazon's EC2 running Ubuntu Server 12.04.3 LTS. 
 
-Make sure you open up port 80 and 22 on the security group or firewall. Also setup you DNS servers to point beta and www to the server's public IP address. 
+Make sure you open up port 80 and 22 on the security group or firewall. Also setup your DNS servers to point beta and www to the server's public IP address. 
 
 You can open up port 3000 and 2368 if you want to do some individual node site testing too.
 
@@ -178,7 +178,7 @@ If you had troubles or want some more informaiton on setting up a git server, yo
 Generate Skelleton Node Sites
 =============================
 
-The global npm module express is able to generate a skelleton webapp by running the express command. We could just generate the app directly in the /opt/git/website.git directory but we will have to keep fixing permissions so lets generate this in a temp directory and commit it using the proper git workflow. You can of couse do this on you computer instead.
+The global npm module express is able to generate a skelleton webapp by running the express command. We could just generate the app directly in the /opt/git/website.git directory but we will have to keep fixing permissions so lets generate this in a temp directory and commit it using the proper git workflow. You can of course do this on you computer instead.
 
 ```sh
 cd /tmp/
@@ -213,7 +213,7 @@ git push origin master
 
 You might want to update the Ghost link version from above to the latest.
 
-By default Ghost blog's database is a local sqlite database. Lets move it out of its default directory so we dont destroy its contents when we deploy new code.
+By default Ghost blog's database is a local sqlite database. Lets move it out of its default directory so we don't destroy its contents when we deploy new code.
 
 ```sh
 sudo mkdir -p /opt/ghostdb
@@ -236,7 +236,7 @@ Here are the [gettting started docs](https://github.com/TryGhost/Ghost) in case 
 Auto Publish Node Sites with Git Hooks
 ======================================
 
-So now we have an express site and an ghost blog but they aren't running anywhere. Git hooks are located in the /opt/git/website.git/hooks/ directory and are basically scripts that will run automatically by git when you commit a change. We can use these to checkout the code to another directory to be run by a daemon. 
+So now we have an express site and a ghost blog but they aren't running anywhere. Git hooks are located in the /opt/git/website.git/hooks/ directory and are basically scripts that will run automatically by git when you commit a change. We can use these to checkout the code to another directory to be run by a daemon. 
 
 First setup the folder permissions with this
 ```sh
@@ -271,7 +271,7 @@ You can test your website now by starting node.
 sudo node /var/www/current/www/app.js
 sudo node /var/www/current/blog/index.js
 ```
-Then go to http://example.com:3000 and http://example.com:2368. Dont worry about the ports, we will get them fixed soon. Once you are done, terminate those node processes.
+Then go to http://example.com:3000 and http://example.com:2368. Don't worry about the ports, we will get them fixed soon. Once you are done, terminate those node processes.
 
 The git hook will also look for the upstart processes node-www and node-blog and restart them if needed. We create them in the next step so it won't do anything right now.
 
@@ -314,7 +314,7 @@ sudo chown nodeuser:www-data /var/log/node
 
 ```
 
-The git hook we setup earlier will try to restart the upstart jobs every time it updates the code. Ubuntu only allows privileged (root) users restart upstart jobs so we need to add a rule into the sudoers directory to tell ubuntu that the git user can do this. I would prefer not to give full rights here but I dont see any other way. 
+The git hook we setup earlier will try to restart the upstart jobs every time it updates the code. Ubuntu only allows privileged (root) users restart upstart jobs so we need to add a rule into the sudoers directory to tell ubuntu that the git user can do this. I would prefer not to give full rights here but I don't see any other way. This should be secure though since nobody should be able to modify the hook remotely. 
 
 ```sh
 
@@ -332,7 +332,7 @@ sudo start node-blog
 
 ```
 
-If everything went to plan you should have 2 sites running http://example.com:3000 and http://example.com:2368. If the blog (http://example.com:2368) doesn't work, dont worry, that is because of the host ip address in the config. Nginx will fix this for us.
+If everything went to plan you should have 2 sites running http://example.com:3000 and http://example.com:2368. If the blog (http://example.com:2368) doesn't work, don't worry, that is because of the host ip address in the config. Nginx will fix this for us.
 
 
 
@@ -340,13 +340,13 @@ If everything went to plan you should have 2 sites running http://example.com:30
 Configure Nginx Virtual Hosts
 =============================
 
-Now that we have two separate node processes running on different ports, we need to tell nginx to route different hostnames and urls to the different ports. Here is the summery of the configs we will setup:
+Now that we have two separate node processes running on different ports, we need to tell nginx to route different hostnames and urls to the different ports. Here is the summary of the configs we will setup:
 
 * www.example.com -> port 3000
 * example.com -> Redirect to www.example.com
 * www.example.com/blog -> port 2368
 
-In the same gist as before, there is a base config file for nginx that we can substitute some values into for our purposes. 
+We will use nginx.conf as a base config file for nginx that we can substitute some values into for our purposes. 
 
 ```sh
 
@@ -362,3 +362,9 @@ sudo service nginx restart
 
 Now, if that worked, you should be all set with your sites running on www.example.com and www.example.com/blog so congratulations. 
 
+
+
+Feedback
+========
+
+Please if you have found any errors or have any suggestions, either submit an issue, make a pull request or simply email me at glen.arrowsmith@gmail.com. I hope this helped you out in some way.
