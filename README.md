@@ -74,6 +74,16 @@ sudo npm install -g forever express
 Configuration
 =========
 
+Get Config Files
+---------
+
+Included in this repo are some config files. Lets get them now to use later on. 
+
+```sh
+cd /tmp
+git clone https://github.com/garrows/noleg-stack.git
+``` 
+
 Configure Git
 ---------
 
@@ -191,40 +201,11 @@ sudo chgrp -R www-data /var/www
 sudo chmod -R g+w /var/www
 ```
 
-Lets create the script /opt/git/website.git/hooks/post-commit with the following command. 
+Lets create the script /opt/git/website.git/hooks/post-commit from the sample in this repo. 
 
 ```sh
-sudo touch /opt/git/website.git/hooks/post-receive
-sudo chmod 777 /opt/git/website.git/hooks/post-receive
 
-cat > /opt/git/website.git/hooks/post-receive << EOL
-set -e
-REV=\`git rev-parse HEAD\`
-DIR=/var/www/\$REV/
-mkdir -p \$DIR
-echo "Checking out to \$DIR"
-GIT_WORK_TREE=\$DIR git checkout -f
-
-cd \$DIR
-cd www
-npm install
-cd ../blog
-npm install
-echo "Done installs"
-
-if [ -d /var/www/current ]; then
-  OLD_DIR=\`readlink /var/www/current\`
-fi
-
-echo "Linking \$DIR"
-ln -sfn \$DIR /var/www/current
-
-if [ -d /var/www/current ]; then
-  echo "Removing old directory \$OLD_DIR"
-  rm -rf \$OLD_DIR
-fi
-EOL
-
+cp /tmp/noleg-stack/post-receive.sh /opt/git/website.git/hooks/post-receive
 sudo chmod 755 /opt/git/website.git/hooks/post-receive
 sudo chown git:www-data /opt/git/website.git/hooks/post-receive
 
