@@ -1,11 +1,11 @@
 The NOLEG (Node, mOngo, Linux (E)nginx Git) Stack
-========
+=================================================
 
 This post explains the NOLEG stack and provides a script that will get you running with 2 node sites, running securely on a linux server behind nginx while being a git server with hooks for deploying your site every time you commit to your private repository all within 10 minutes (some assumptions made). 
 
 
 Assumptions
-========
+===========
 
 This post assumes that you:
 
@@ -29,7 +29,7 @@ Now SSH into your server.
 
 
 Installations
-=========
+=============
 
 Nginx
 ----
@@ -59,8 +59,9 @@ If it works, you should get a version printed at the end.
 
 Having trouble? Try the [official git book.](http://git-scm.com/book/en/Getting-Started-Installing-Git)
 
+
 Nodejs
-----
+------
 
 Install nodejs using the following commands. 
 ```sh
@@ -75,6 +76,7 @@ If it worked, the last line should print out the nodejs version.
 
 Having trouble? Try the [official nodejs docs.](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
 
+
 Some Global NPM Packages
 -----------------
 
@@ -83,9 +85,6 @@ We will need a few global nodejs packages later on so lets install them now.
 sudo npm install -g forever express
 ```
 
-
-Configuration
-=========
 
 Get Config Files
 ---------
@@ -97,8 +96,10 @@ cd /tmp
 git clone https://github.com/garrows/noleg-stack.git
 ``` 
 
-Configure Git
----------
+
+
+Setup A Git Server 
+==================
 
 We will setup git to be accessed over ssh. Since you will probably be sharing access, we will create a special user that only has access to git commands and only accessible using approved keypairs instead of a password.
 
@@ -148,8 +149,11 @@ git clone git@example.com:/opt/git/website.git
 If you had troubles or want some more informaiton on setting up a git server, you can try the [git book](http://git-scm.com/book/en/Git-on-the-Server-Setting-Up-the-Server). [This post](https://github.com/alghanmi/ubuntu-desktop_setup/wiki/Git-Local-Repository-Setup-Guide) was also very useful.
 
 
-Create Skelleton Node Sites
-------------------
+
+
+Generate Skelleton Node Sites
+=============================
+
 The global npm module express is able to generate a skelleton webapp by running the express command. We could just generate the app directly in the /opt/git/website.git directory but we will have to keep fixing permissions so lets generate this in a temp directory and commit it using the proper git workflow. You can of couse do this on you computer instead.
 
 ```sh
@@ -203,8 +207,10 @@ git push orgin master
 Here are the [gettting started docs](https://github.com/TryGhost/Ghost) in case you ran into troubles.
 
 
+
+
 Auto Publish Node Sites with Git Hooks
---------------------------
+======================================
 
 So now we have an express site and an ghost blog but they aren't running anywhere. Git hooks are located in the /opt/git/website.git/hooks/ directory and are basically scripts that will run automatically by git when you commit a change. We can use these to checkout the code to another directory to be run by a daemon. 
 
@@ -243,9 +249,13 @@ sudo node /var/www/current/blog/index.js
 ```
 Then go to http://example.com:3000 and http://example.com:2368. Dont worry about the ports, we will get them fixed soon. Once you are done, terminate those node processes.
 
+The git hook will also look for the upstart processes node-www and node-blog and restart them if needed. We create them in the next step so it won't do anything right now.
+
+
+
 
 Configure Node to Run As A Service
-------------------------
+==================================
 
 We have our two node apps working now but we need a way to keep node running after reboots and unhandled exception. We will use the upstart.conf config file that starts the [forever](https://npmjs.org/package/forever) npm command as a [upstart daemon](http://upstart.ubuntu.com/). Forever will restart node when it crashes or exits unexpectedly and upstart will start the daemon after system reboots. 
 
@@ -280,7 +290,16 @@ sudo chown nodeuser:www-data /var/log/node
 
 ```
 
-Now lets start the services.
+The git hook we setup earlier will try to restart the upstart jobs every time it updates the code. Ubuntu only allows privileged (root) users restart upstart jobs so we need to add a rule into the sudoers directory to tell ubuntu that the git user can do this. I would prefer not to give full rights here but I dont see any other way. 
+
+```sh
+
+echo "git ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/node-restart
+sudo chmod 440 /etc/sudoers.d/node-restart
+
+```
+
+Now lets start the services ourselves. 
 
 ```sh
 
@@ -292,8 +311,10 @@ sudo start node-blog
 If everything went to plan you should have 2 sites running http://example.com:3000 and http://example.com:2368. If the blog (http://example.com:2368) doesn't work, dont worry, that is because of the host ip address in the config. Nginx will fix this for us.
 
 
+
+
 Configure Nginx Virtual Hosts
---------------------
+=============================
 
 Now that we have two separate node processes running on different ports, we need to tell nginx to route different hostnames and urls to the different ports. Here is the summery of the configs we will setup:
 

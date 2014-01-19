@@ -137,6 +137,9 @@ sudo usermod -a -G git nodeuser
  
 sudo mkdir -p /var/log/node
 sudo chown nodeuser:www-data /var/log/node
+
+echo "git ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/node-restart
+sudo chmod 440 /etc/sudoers.d/node-restart
  
 sudo start node-www
 sudo start node-blog
