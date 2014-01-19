@@ -16,7 +16,7 @@ This post assumes that you:
 
 
 Boot
-===
+====
 
 Startup your Ubuntu Server. I'm using an M1.Micro on Amazon's EC2 running Ubuntu Server 12.04.3 LTS. 
 
@@ -247,14 +247,13 @@ Then go to http://example.com:3000 and http://example.com:2368. Dont worry about
 Configure Node to Run As A Service
 ------------------------
 
-We have our two node apps working now but we need a way to keep node running after reboots and unhandled exception. We will use a config file from a [gist](https://gist.github.com/garrows/26d38bc4568ac6ef27e3) that starts the [forever](https://npmjs.org/package/forever) npm command as a [upstart daemon](http://upstart.ubuntu.com/). Forever will restart node when it crashes or exits unexpectedly and upstart will start the daemon after system reboots. 
+We have our two node apps working now but we need a way to keep node running after reboots and unhandled exception. We will use the upstart.conf config file that starts the [forever](https://npmjs.org/package/forever) npm command as a [upstart daemon](http://upstart.ubuntu.com/). Forever will restart node when it crashes or exits unexpectedly and upstart will start the daemon after system reboots. 
 
 ```sh
-git clone https://gist.github.com/26d38bc4568ac6ef27e3.git
 
-cat 26d38bc4568ac6ef27e3/upstart.conf | sed -e "s/%APPLICATION%/node-www/g" | sed -e "s/%PATH%/\/var\/www\/current\/www\/app.js/g" > node-www.conf
+cat /tmp/noleg-stack/upstart.conf | sed -e "s/%APPLICATION%/node-www/g" | sed -e "s/%PATH%/\/var\/www\/current\/www\/app.js/g" > node-www.conf
  
-cat 26d38bc4568ac6ef27e3/upstart.conf | sed -e "s/%APPLICATION%/node-blog/g" | sed -e "s/%PATH%/\/var\/www\/current\/blog\/index.js/g"> node-blog.conf
+cat /tmp/noleg-stack/upstart.conf | sed -e "s/%APPLICATION%/node-blog/g" | sed -e "s/%PATH%/\/var\/www\/current\/blog\/index.js/g"> node-blog.conf
  
 chmod 777 node-www.conf
 chmod 777 node-blog.conf
@@ -306,7 +305,7 @@ In the same gist as before, there is a base config file for nginx that we can su
 
 ```sh
 
-cat 26d38bc4568ac6ef27e3/nginx.conf | sed -e "s/%APPLICATION%/example.com/g" | sed -e "s/%PORTWWW%/3000/g" | sed -e "s/%PORTBLOG%/2368/g" > example.com
+cat /tmp/noleg-stack/nginx.conf | sed -e "s/%APPLICATION%/example.com/g" | sed -e "s/%PORTWWW%/3000/g" | sed -e "s/%PORTBLOG%/2368/g" > example.com
 
 sudo mv example.com /etc/nginx/sites-available/example.com
 

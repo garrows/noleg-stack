@@ -19,6 +19,9 @@ sudo apt-get install -y nodejs
 node -v
  
 sudo npm install -g forever express
+
+cd /tmp
+git clone https://github.com/garrows/noleg-stack.git
  
 sudo adduser --shell $(which git-shell) --gecos 'git version control' --disabled-password git
 sudo usermod -a -G www-data git
@@ -80,6 +83,7 @@ sudo chmod -R g+w /var/www
  
 sudo touch /opt/git/website.git/hooks/post-receive
 sudo chmod 777 /opt/git/website.git/hooks/post-receive
+
  
 cat > /opt/git/website.git/hooks/post-receive << EOL
 set -e
@@ -119,12 +123,9 @@ git add README.md
 git commit -m "Added readme to test auto publish"
 git push
  
-cd /tmp
-git clone https://gist.github.com/26d38bc4568ac6ef27e3.git
+cat /tmp/noleg-stack/upstart.conf | sed -e "s/%APPLICATION%/node-www/g" | sed -e "s/%PATH%/\/var\/www\/current\/www\/app.js/g" > node-www.conf
  
-cat 26d38bc4568ac6ef27e3/upstart.conf | sed -e "s/%APPLICATION%/node-www/g" | sed -e "s/%PATH%/\/var\/www\/current\/www\/app.js/g" > node-www.conf
- 
-cat 26d38bc4568ac6ef27e3/upstart.conf | sed -e "s/%APPLICATION%/node-blog/g" | sed -e "s/%PATH%/\/var\/www\/current\/blog\/index.js/g"> node-blog.conf
+cat /tmp/noleg-stack/upstart.conf | sed -e "s/%APPLICATION%/node-blog/g" | sed -e "s/%PATH%/\/var\/www\/current\/blog\/index.js/g"> node-blog.conf
  
 chmod 777 node-www.conf
 chmod 777 node-blog.conf
@@ -141,7 +142,7 @@ sudo start node-www
 sudo start node-blog
  
  
-cat 26d38bc4568ac6ef27e3/nginx.conf | sed -e "s/%APPLICATION%/$DOMAIN/g" | sed -e "s/%PORTWWW%/3000/g" | sed -e "s/%PORTBLOG%/2368/g" > $DOMAIN
+cat /tmp/noleg-stack/nginx.conf | sed -e "s/%APPLICATION%/$DOMAIN/g" | sed -e "s/%PORTWWW%/3000/g" | sed -e "s/%PORTBLOG%/2368/g" > $DOMAIN
  
 sudo mv $DOMAIN /etc/nginx/sites-available/$DOMAIN
  
