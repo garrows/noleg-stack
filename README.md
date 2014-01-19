@@ -59,6 +59,22 @@ If it works, you should get a version printed at the end.
 
 Having trouble? Try the [official git book.](http://git-scm.com/book/en/Getting-Started-Installing-Git)
 
+MongoDB
+-------
+
+Install mongo with
+
+```sh
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+sudo apt-get update
+sudo apt-get install mongodb-10gen
+sudo service mongodb start
+mongo --version
+```
+
+You should get mongoDB's version printed at the end if this worked. If not, try the [MongoDB Install Guide](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/).
+
 
 Nodejs
 ------
