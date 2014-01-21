@@ -74,7 +74,7 @@ sudo mkdir -p /opt/ghostdb
 sudo cp -R /tmp/website/blog/content /opt/ghostdb
 sudo chown -R git:www-data /opt/ghostdb
 cd /tmp/website/blog
-cat config.example.js | sed -e "s/__dirname/\'\/opt\/ghostdb\'/g" > config.js
+cat config.example.js | sed -e "s/__dirname/\'\/opt\/ghostdb\'/g" | sed -e "s/my-ghost-blog.com/$DOMAIN\/blog/g" > config.js
  
 git add config.js
 git commit -m "Updated ghost config so the database is not lost"
@@ -88,34 +88,7 @@ sudo touch /opt/git/website.git/hooks/post-receive
 sudo chmod 777 /opt/git/website.git/hooks/post-receive
 
  
-cat > /opt/git/website.git/hooks/post-receive << EOL
-set -e
-REV=\`git rev-parse HEAD\`
-DIR=/var/www/\$REV/
-mkdir -p \$DIR
-echo "Checking out to \$DIR"
-GIT_WORK_TREE=\$DIR git checkout -f
- 
-cd \$DIR
-cd www
-npm install
-cd ../blog
-npm install
-echo "Done installs"
- 
-if [ -d /var/www/current ]; then
-  OLD_DIR=\`readlink /var/www/current\`
-fi
- 
-echo "Linking \$DIR"
-ln -sfn \$DIR /var/www/current
- 
-if [ -d /var/www/current ]; then
-  echo "Removing old directory \$OLD_DIR"
-  rm -rf \$OLD_DIR
-fi
-EOL
- 
+sudo cp /tmp/noleg-stack/post-receive.sh /opt/git/website.git/hooks/post-receive
 sudo chmod 755 /opt/git/website.git/hooks/post-receive
 sudo chown git:www-data /opt/git/website.git/hooks/post-receive
  

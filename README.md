@@ -260,7 +260,7 @@ Lets create the script /opt/git/website.git/hooks/post-commit from the sample in
 
 ```sh
 
-cp /tmp/noleg-stack/post-receive.sh /opt/git/website.git/hooks/post-receive
+sudo cp /tmp/noleg-stack/post-receive.sh /opt/git/website.git/hooks/post-receive
 sudo chmod 755 /opt/git/website.git/hooks/post-receive
 sudo chown git:www-data /opt/git/website.git/hooks/post-receive
 
