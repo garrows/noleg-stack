@@ -73,6 +73,7 @@ git push origin master
 sudo mkdir -p /opt/ghostdb
 sudo cp -R /tmp/website/blog/content /opt/ghostdb
 sudo chown -R git:www-data /opt/ghostdb
+sudo chmod -R 770 /opt/ghostdb
 cd /tmp/website/blog
 cat config.example.js | sed -e "s/__dirname/\'\/opt\/ghostdb\'/g" | sed -e "s/my-ghost-blog.com/$DOMAIN\/blog/g" > config.js
  

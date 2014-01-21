@@ -9,15 +9,18 @@ Use the Script
 
 If you want to get started real fast, start your Ubuntu server and run setup.sh on it changing the DOMAIN setting to what ever domain you are using. You should be able to go to http://www.example.com and http://www.example.com/blog and see 2 different sites along with having your very own git server.
 
-All you need to do is run the following commands on a fresh server (replace your-domain-here.com with your domain (dont include the www)) and you are all set.
+All you need to do is run the following commands on a fresh server (replace example.com with your domain (don't include the www)) and you are all set.
 
 ```sh
+#!/bin/bash
+
+DOMAIN=example.com
+
 sudo apt-get install -y git
 git clone https://github.com/garrows/noleg-stack.git
 cd noleg-stack
+cat setup.sh | sed -e "s/example.com/$DOMAIN/g" > setup.sh
 chmod 777 setup.sh
-
-cat setup.sh | sed -e "s/example.com/your-domain-here.com/g" > setup.sh
 
 ./setup.sh
 ```
@@ -231,6 +234,8 @@ By default Ghost blog's database is a local sqlite database. Lets move it out of
 sudo mkdir -p /opt/ghostdb
 sudo cp -R /tmp/website/blog/content /opt/ghostdb
 sudo chown -R git:www-data /opt/ghostdb
+sudo chmod -R 770 /opt/ghostdb
+
 cp config.js config.js.orig
 cat config.js.orig | sed -e "s/__dirname/\'\/opt\/ghostdb\'/g" > config.js
 
