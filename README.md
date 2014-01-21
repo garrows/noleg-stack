@@ -19,7 +19,7 @@ chmod 777 setup.sh
 
 cat setup.sh | sed -e "s/example.com/your-domain-here.com/g" > setup.sh
 
-sudo ./setup.sh
+./setup.sh
 ```
 
 If this doesn't work for you or you would like to lean a few things, follow the step by step instructions below.
