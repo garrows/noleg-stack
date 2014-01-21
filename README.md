@@ -9,6 +9,19 @@ Use the Script
 
 If you want to get started real fast, start your Ubuntu server and run setup.sh on it changing the DOMAIN setting to what ever domain you are using. You should be able to go to http://www.example.com and http://www.example.com/blog and see 2 different sites along with having your very own git server.
 
+All you need to do is run the following commands on a fresh server (replace your-domain-here.com with your domain (dont include the www)) and you are all set.
+
+```sh
+sudo apt-get install -y git
+git clone https://github.com/garrows/noleg-stack.git
+cd noleg-stack
+chmod 777 setup.sh
+
+cat setup.sh | sed -e "s/example.com/your-domain-here.com/g" > setup.sh
+
+sudo ./setup.sh
+```
+
 If this doesn't work for you or you would like to lean a few things, follow the step by step instructions below.
 
 
