@@ -67,6 +67,7 @@ sudo chown -R git:www-data /opt/git/website.git
 # Clone empty repository
 cd /tmp/
 echo -e "Host $DOMAIN\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+echo -e "Host localhost\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 git clone git@localhost:/opt/git/website.git
 # git clone git@$DOMAIN:/opt/git/website.git
 cd website
@@ -92,15 +93,17 @@ cd /var/www/static
 
 
 # Install ghost to the static directory
+cd /tmp
 wget https://ghost.org/zip/ghost-0.4.1.zip
 sudo apt-get install -y unzip
 unzip ghost-0.4.1.zip -d blog
 rm ghost-0.4.1.zip
 
 # Modify ghost's config to point to http://example.com/blog
-cat config.example.js | sed -e "s/my-ghost-blog.com/$DOMAIN\/blog/g" > config.js
+cat blog/config.example.js | sed -e "s/my-ghost-blog.com/$DOMAIN\/blog/g" > blog/config.js
 
-# Change ownership to node-user
+# Move to static web directory and change ownership to node-user
+sudo mv blog /var/www/static/blog
 sudo chown -R node-user:www-data /var/www/static
 
 

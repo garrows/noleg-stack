@@ -19,10 +19,10 @@ DOMAIN=example.com
 sudo apt-get install -y git
 git clone https://github.com/garrows/noleg-stack.git
 cd noleg-stack
-cat setup.sh | sed -e "s/example.com/$DOMAIN/g" > setup.sh
-chmod 777 setup.sh
+cat setup.sh | sed -e "s/example.com/$DOMAIN/g" > setupServer.sh
+chmod 777 setupServer.sh
 
-./setup.sh
+./setupServer.sh
 ```
 
 If this doesn't work for you or you would like to learn a few things, follow the step by step instructions below.
