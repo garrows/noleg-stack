@@ -22,12 +22,8 @@ fi
  
 echo "Linking $DIR"
 ln -sfn $DIR /var/www/current
-
-if [ -d $OLD_DIR/blog/content ]; then
-    echo "Unlinking ghost content directory"
-fi
  
-if [ -d /var/www/current ]; then
+if [ -d $OLD_DIR ]; then
   echo "Removing old directory $OLD_DIR"
   rm -rf $OLD_DIR
 fi
