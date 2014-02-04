@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -e
+
+
 REV=`git rev-parse HEAD`
 DIR=/var/www/$REV/
 mkdir -p $DIR
@@ -20,12 +22,15 @@ fi
  
 echo "Linking $DIR"
 ln -sfn $DIR /var/www/current
+
+if [ -d $OLD_DIR/blog/content ]; then
+    echo "Unlinking ghost content directory"
+fi
  
 if [ -d /var/www/current ]; then
   echo "Removing old directory $OLD_DIR"
   rm -rf $OLD_DIR
 fi
-
 
 
 is_upstart_service_running(){
@@ -38,7 +43,7 @@ does_upstart_service_exist(){
     return $?
 }
 
-
+# Restart the website
 if is_upstart_service_running node-www
 then
         echo "Stopping node-www"
@@ -50,11 +55,7 @@ then
         sudo start node-www
 fi
 
-if is_upstart_service_running node-blog
-then
-        echo "Stopping node-blog"
-        sudo stop node-blog
-fi
+# No need to restart the blog if its already running since it doesnt automatically get updated.
 if ! does_upstart_service_exist node-blog
 then
         echo "Starting node-blog"
