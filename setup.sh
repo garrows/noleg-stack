@@ -99,6 +99,8 @@ sudo apt-get install -y unzip
 unzip ghost-0.4.1.zip -d blog
 rm ghost-0.4.1.zip
 cd /tmp/blog
+# Fix permissions issue caused by a sudo npm install earlier
+sudo chown -R `whoami` ~/tmp 
 npm install
 
 # Modify ghost's config to point to http://example.com/blog
