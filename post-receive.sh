@@ -2,24 +2,38 @@
 
 set -e
 
+WEBDIR=%WEBDIR%
+SERVICE=%SERVICE%
 
+#Get latest commit
 REV=`git rev-parse HEAD`
-DIR=/var/www/$REV/
-mkdir -p $DIR
-echo "Checking out to $DIR"
-GIT_WORK_TREE=$DIR git checkout -f
+CHECKOUTDIR=$WEBDIR/$REV/
+
+mkdir -p $CHECKOUTDIR
+echo "Checking out to $CHECKOUTDIR"
+GIT_WORK_TREE=$CHECKOUTDIR git checkout -f
  
-cd $DIR
-cd www
-npm install
-echo "Done installs"
+cd $CHECKOUTDIR
+echo "Attempting build"
+
+if [ -a Makefile ]; then
+  echo "Running make"
+  make
+fi
+
+if [ -a FILE ]; then
+  echo "NPM Installing"
+  npm install
+fi
+
+echo "Done build"
  
-if [ -d /var/www/current ]; then
-  OLD_DIR=`readlink /var/www/current`
+if [ -d $WEBDIR/current ]; then
+  OLD_DIR=`readlink $WEBDIR/current`
 fi
  
-echo "Linking $DIR"
-ln -sfn $DIR /var/www/current
+echo "Linking $CHECKOUTDIR"
+ln -sfn $CHECKOUTDIR $WEBDIR/current
  
 if [ -d $OLD_DIR ]; then
   echo "Removing old directory $OLD_DIR"
@@ -38,22 +52,15 @@ does_upstart_service_exist(){
 }
 
 # Restart the website
-if is_upstart_service_running node-www
+if is_upstart_service_running $SERVICE
 then
-        echo "Stopping node-www"
-        sudo stop node-www
+        echo "Stopping $SERVICE"
+        sudo stop $SERVICE
 fi
-if ! does_upstart_service_exist node-www
+if ! does_upstart_service_exist $SERVICE
 then
-        echo "Starting node-www"
-        sudo start node-www
-fi
-
-# No need to restart the blog if its already running since it doesnt automatically get updated.
-if ! does_upstart_service_exist node-blog
-then
-        echo "Starting node-blog"
-        sudo start node-blog
+        echo "Starting $SERVICE"
+        sudo start $SERVICE
 fi
 
 echo "Done"
