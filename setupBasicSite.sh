@@ -38,13 +38,13 @@ sudo chown git:www-data $GITDIR/hooks/post-receive
 cp upstart.conf /tmp/$SERVICE.conf
 sed -i "s,%APPLICATION%,$DOMAIN," /tmp/$SERVICE.conf
 sed -i "s,%NODEPORT%,$NODEPORT," /tmp/$SERVICE.conf
-sed -i "s,%PATH%,$WEBDIR," /tmp/$SERVICE.conf
+sed -i "s,%PATH%,$WEBDIR/current," /tmp/$SERVICE.conf
 chmod 777 /tmp/$SERVICE.conf
 sudo mv /tmp/$SERVICE.conf /etc/init/$SERVICE.conf
 
 # Configure nginx to direct traffic to the node processes
 cp nginx.conf /tmp/$DOMAIN
-sed -i "s,%APPLICATION%,$DOMAIN," /tmp/$DOMAIN
+sed -i "s,%DOMAIN%,$DOMAIN," /tmp/$DOMAIN
 sed -i "s,%NODEPORT%,$NODEPORT," /tmp/$DOMAIN
 sudo mv /tmp/$DOMAIN /etc/nginx/sites-available/$DOMAIN
 sudo ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/$DOMAIN
