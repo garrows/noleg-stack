@@ -33,7 +33,7 @@ sudo chmod 755 $GITDIR/hooks/post-receive
 sudo chown git:www-data $GITDIR/hooks/post-receive
 
 # Setup upstart to keep node running
-cat /tmp/noleg-stack/upstart.conf | sed -e "s/%APPLICATION%/$DOMAIN/g" | sed -e "s/%NODEPORT%/$NODEPORT/g" | sed -e "s/%PATH%/$WEBDIR/g" > $SERVICE.conf
+cat upstart.conf | sed -e "s/%APPLICATION%/$DOMAIN/g" | sed -e "s/%NODEPORT%/$NODEPORT/g" | sed -e "s/%PATH%/$WEBDIR/g" > $SERVICE.conf
 chmod 777 $SERVICE.conf
 sudo mv $SERVICE.conf /etc/init/
 
