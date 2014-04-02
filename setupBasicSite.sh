@@ -27,21 +27,25 @@ sudo chgrp -R www-data $WEBDIR
 sudo chmod -R g+w $WEBDIR
 
 # Get git to publish a copy of the repository to /var/www/$DOMAIN/current every time a commit happens
-cat post-receive.sh | sed -e "s/%WEBDIR%/$WEBDIR/g" | sed -e "s/%SERVICE%/$SERVICE/g" > /tmp/post-receive
+cp post-receive.sh /tmp/post-receive
+sed -i "s,%WEBDIR%,$WEBDIR," /tmp/post-receive
+sed -i "s,%SERVICE%,$SERVICE," /tmp/post-receive
 sudo mv /tmp/post-receive $GITDIR/hooks/post-receive
 sudo chmod 755 $GITDIR/hooks/post-receive
 sudo chown git:www-data $GITDIR/hooks/post-receive
 
 # Setup upstart to keep node running
-cat upstart.conf | sed -e "s/%APPLICATION%/$DOMAIN/g" | sed -e "s/%NODEPORT%/$NODEPORT/g" | sed -e "s/%PATH%/$WEBDIR/g" > $SERVICE.conf
-chmod 777 $SERVICE.conf
-sudo mv $SERVICE.conf /etc/init/
+cp upstart.conf /tmp/$SERVICE.conf
+sed -i "s,%APPLICATION%,$DOMAIN," /tmp/$SERVICE.conf
+sed -i "s,%NODEPORT%,$NODEPORT," /tmp/$SERVICE.conf
+sed -i "s,%PATH%,$WEBDIR," /tmp/$SERVICE.conf
+chmod 777 /tmp/$SERVICE.conf
+sudo mv /tmp/$SERVICE.conf /etc/init/$SERVICE.conf
 
-# Configure nginx to direct traffic to the two node processes
-cat nginx.conf | sed -e "s/%APPLICATION%/$DOMAIN/g" | sed -e "s/%NODEPORT%/$NODEPORT/g" > /tmp/$DOMAIN
-
+# Configure nginx to direct traffic to the node processes
+cp nginx.conf /tmp/$DOMAIN
+sed -i "s,%APPLICATION%,$DOMAIN," /tmp/$DOMAIN
+sed -i "s,%NODEPORT%,$NODEPORT," /tmp/$DOMAIN
 sudo mv /tmp/$DOMAIN /etc/nginx/sites-available/$DOMAIN
-
 sudo ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/$DOMAIN
-
 sudo service nginx restart
