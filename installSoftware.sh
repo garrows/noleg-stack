@@ -6,7 +6,6 @@ sudo apt-get update
 
 # Install git, nginx, mongo, nodejs, forever and express
 sudo apt-get install -y nginx
-sudo nginx
 
 sudo apt-get install -y git
 
