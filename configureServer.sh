@@ -22,14 +22,8 @@ sudo chown -R git:git /home/git/
 
 cat ~/.ssh/authorized_keys | sudo tee -a /home/git/.ssh/authorized_keys
 
-ssh-keygen -t rsa -N '' -f /home/ubuntu/.ssh/id_rsa
-cat /home/ubuntu/.ssh/id_rsa.pub | sudo tee -a /home/git/.ssh/authorized_keys
-
-echo "You should copy your local id to the server like this:"
-echo "ssh-copy-id root@example.com"
-echo "or"
-echo "cat ~/.ssh/id_rsa.pub | ssh root@example.com \"mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys\""
-
+ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub | sudo tee -a /home/git/.ssh/authorized_keys
 
 # Setup publish directories for node sites
 sudo mkdir -p /var/www
