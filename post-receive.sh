@@ -12,7 +12,7 @@ CHECKOUTDIR=$WEBDIR/$REV/
 mkdir -p $CHECKOUTDIR
 echo "Checking out to $CHECKOUTDIR"
 GIT_WORK_TREE=$CHECKOUTDIR git checkout -f
- 
+
 cd $CHECKOUTDIR
 echo "Attempting build"
 
@@ -21,20 +21,18 @@ if [ -a Makefile ]; then
   make
 fi
 
-if [ -a FILE ]; then
-  echo "NPM Installing"
-  npm install
-fi
+echo "NPM Installing"
+npm install
 
 echo "Done build"
- 
+
 if [ -d $WEBDIR/current ]; then
   OLD_DIR=`readlink $WEBDIR/current`
 fi
- 
+
 echo "Linking $CHECKOUTDIR"
 ln -sfn $CHECKOUTDIR $WEBDIR/current
- 
+
 if [ -d $OLD_DIR ]; then
   echo "Removing old directory $OLD_DIR"
   rm -rf $OLD_DIR
@@ -64,4 +62,3 @@ then
 fi
 
 echo "Done"
-
