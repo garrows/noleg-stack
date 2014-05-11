@@ -16,20 +16,7 @@ Server Setup
 Ssh into your server and run the following commands (replace example.com with your domain). You can either run this as a script or run the commands by hand.
 
 ```bash
-#!/bin/bash
-set -e
-set -v
-
-DOMAIN=example.com
-
-sudo apt-get install -y git
-git clone https://github.com/garrows/noleg-stack.git
-cd noleg-stack
-chmod 777 *.sh
-
-./installSoftware.sh
-./configureServer.sh
-./setupBasicSite.sh $DOMAIN 3000
+DOMAIN=example.com bash <(curl -s https://raw.githubusercontent.com/garrows/noleg-stack/master/init.sh)
 
 ```
 
