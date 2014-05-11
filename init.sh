@@ -15,8 +15,8 @@ git clone https://github.com/garrows/noleg-stack.git
 cd noleg-stack
 chmod 777 *.sh
 
-#./installSoftware.sh
-#./configureServer.sh
-#./setupBasicSite.sh $DOMAIN 3000
+./installSoftware.sh
+./configureServer.sh
+./setupBasicSite.sh $DOMAIN 3000
 
 echo "All done. Try going to http://$DOMAIN/ now."
