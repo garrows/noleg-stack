@@ -13,7 +13,7 @@ Assumptions
 Server Setup
 ------------
 
-Ssh into your server and run the following commands (replace example.com with your domain). You can either run this as a script or run the commands by hand.
+Ssh into your server and run the following command (replace example.com with your domain).
 
 ```bash
 DOMAIN=example.com bash <(curl -s https://raw.githubusercontent.com/garrows/noleg-stack/master/init.sh)
