@@ -6,12 +6,23 @@ WEBDIR=%WEBDIR%
 SERVICE=%SERVICE%
 
 #Get latest commit
-REV=`git rev-parse HEAD`
+REV=`git rev-parse master`
 CHECKOUTDIR=$WEBDIR/$REV/
+
+OLD_DIR="Unknown"
+if [ -d $WEBDIR/current ]; then
+  OLD_DIR=`readlink $WEBDIR/current`
+fi
+
+if [ $OLD_DIR == $CHECKOUTDIR ]; then
+    echo "WARNING: Master SHA hasn't changed. Aborting publish. $REV"
+    exit 0
+fi
+
 
 mkdir -p $CHECKOUTDIR
 echo "Checking out to $CHECKOUTDIR"
-GIT_WORK_TREE=$CHECKOUTDIR git checkout -f
+GIT_WORK_TREE=$CHECKOUTDIR git checkout -f master
 
 cd $CHECKOUTDIR
 echo "Attempting build"
@@ -26,9 +37,6 @@ npm install
 
 echo "Done build"
 
-if [ -d $WEBDIR/current ]; then
-  OLD_DIR=`readlink $WEBDIR/current`
-fi
 
 echo "Linking $CHECKOUTDIR"
 ln -sfn $CHECKOUTDIR $WEBDIR/current
