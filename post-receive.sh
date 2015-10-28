@@ -48,12 +48,12 @@ fi
 
 
 is_systemd_service_running(){
-    systemctl status $1 | grep -q "^$1 (running)" > /dev/null
+    systemctl status $1 | grep -q "(running)" > /dev/null
     return $?
 }
 
 does_systemd_service_exist(){
-    systemctl status $1 | grep -q "^$1 not-found" > /dev/null
+    systemctl status $1 | grep -q "not-found" > /dev/null
     return $?
 }
 
