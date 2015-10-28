@@ -35,12 +35,12 @@ sudo chmod 755 $GITDIR/hooks/post-receive
 sudo chown git:www-data $GITDIR/hooks/post-receive
 
 # Setup upstart to keep node running
-cp upstart.conf /tmp/$SERVICE.conf
+cp systemd.service /tmp/$SERVICE.conf
 sed -i "s,%APPLICATION%,$DOMAIN," /tmp/$SERVICE.conf
 sed -i "s,%NODEPORT%,$NODEPORT," /tmp/$SERVICE.conf
 sed -i "s,%PATH%,$WEBDIR/current," /tmp/$SERVICE.conf
 chmod 777 /tmp/$SERVICE.conf
-sudo mv /tmp/$SERVICE.conf /etc/init/$SERVICE.conf
+sudo mv /tmp/$SERVICE.conf /etc/systemd/system/$SERVICE.service
 
 # Configure nginx to direct traffic to the node processes
 cp nginx.conf /tmp/$DOMAIN
