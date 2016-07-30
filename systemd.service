@@ -1,0 +1,20 @@
+# cat /etc/systemd/system/%APPLICATION%.service
+# journalctl -fu %APPLICATION%
+
+[Unit]
+Description=Node service for %APPLICATION%
+After=syslog.target network.target nss-lookup.target
+
+[Service]
+User=node-user
+WorkingDirectory=%PATH%
+#EnvironmentFile=-%PATH%/.env
+#ExecStartPre=/usr/bin/sleep 30
+ExecStart=/usr/bin/npm start
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%APPLICATION%
+
+[Install]
+WantedBy=multi-user.target

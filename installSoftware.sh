@@ -15,9 +15,6 @@ sudo apt-get update
 sudo apt-get install -y mongodb-10gen
 
 sudo apt-get install -y software-properties-common python-software-properties python g++ make
-sudo add-apt-repository -y ppa:chris-lea/node.js
-sudo apt-get update
+curl --silent --location https://deb.nodesource.com/setup_4.x | sudo bash -
 sudo apt-get install -y nodejs
 sudo apt-get install -y unzip
-
-sudo npm install -g forever express

@@ -47,26 +47,26 @@ if [ -d $OLD_DIR ]; then
 fi
 
 
-is_upstart_service_running(){
-    status $1 | grep -q "^$1 start" > /dev/null
+is_systemd_service_running(){
+    systemctl status $1 | grep -q "(running)" > /dev/null
     return $?
 }
 
-does_upstart_service_exist(){
-    status $1 | grep -q "^$1 Unknown" > /dev/null
+does_systemd_service_exist(){
+    systemctl status $1 | grep -q "not-found" > /dev/null
     return $?
 }
 
 # Restart the website
-if is_upstart_service_running $SERVICE
+if is_systemd_service_running $SERVICE
 then
         echo "Stopping $SERVICE"
-        sudo stop $SERVICE
+        sudo systemctl stop $SERVICE
 fi
-if ! does_upstart_service_exist $SERVICE
+if ! does_systemd_service_exist $SERVICE
 then
         echo "Starting $SERVICE"
-        sudo start $SERVICE
+        sudo systemctl start $SERVICE
 fi
 
 echo "Done"
