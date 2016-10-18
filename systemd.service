@@ -9,8 +9,7 @@ After=syslog.target network.target nss-lookup.target
 User=node-user
 WorkingDirectory=%PATH%
 Environment=PORT=%NODEPORT%
-#EnvironmentFile=-%PATH%/.env
-#ExecStartPre=/usr/bin/sleep 30
+EnvironmentFile=%PATH%/environment_variables
 ExecStart=/usr/bin/npm start
 Restart=always
 StandardOutput=syslog

@@ -19,4 +19,8 @@ chmod 777 *.sh
 ./configureServer.sh
 ./setupBasicSite.sh $DOMAIN 3000
 
-echo "All done. Try going to http://$DOMAIN/ now."
+echo "All done. Try the following:"
+echo "cd your-node-project"
+echo "git remote add production git@$DOMAIN:$DOMAIN.git"
+echo "git push production"
+echo "open https://$DOMAIN"

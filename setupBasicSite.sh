@@ -26,7 +26,7 @@ sudo mkdir -p $WEBDIR
 sudo chgrp -R www-data $WEBDIR
 sudo chmod -R g+w $WEBDIR
 
-# Get git to publish a copy of the repository to /var/www/$DOMAIN/current every time a commit happens
+# Setup git to publish a copy of the repository to /var/www/$DOMAIN/current every time a commit happens
 cp post-receive.sh /tmp/post-receive
 sed -i "s,%WEBDIR%,$WEBDIR," /tmp/post-receive
 sed -i "s,%SERVICE%,$SERVICE," /tmp/post-receive
