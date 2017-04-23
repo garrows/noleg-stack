@@ -39,8 +39,14 @@ cp systemd.service /tmp/$SERVICE.conf
 sed -i "s,%APPLICATION%,$DOMAIN," /tmp/$SERVICE.conf
 sed -i "s,%NODEPORT%,$NODEPORT," /tmp/$SERVICE.conf
 sed -i "s,%PATH%,$WEBDIR/current," /tmp/$SERVICE.conf
-chmod 777 /tmp/$SERVICE.conf
+touch "$WEBDIR/environment_variables"
+chmod 644 /tmp/$SERVICE.conf
 sudo mv /tmp/$SERVICE.conf /etc/systemd/system/$SERVICE.service
+
+# Setup lets encrypt
+#letsencrypt certonly --webroot -w /var/www/freshplans.garrows.com/current/public/ -d freshplans.garrows.com
+#sudo cp /etc/letsencrypt/live/freshplans.garrows.com/fullchain.pem /etc/nginx/freshplans.garrows.com.chained.pem
+#sudo cp /etc/letsencrypt/live/freshplans.garrows.com/privkey.pem /etc/nginx/freshplans.garrows.com.private.pem
 
 # Configure nginx to direct traffic to the node processes
 cp nginx.conf /tmp/$DOMAIN
